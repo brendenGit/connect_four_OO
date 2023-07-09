@@ -8,8 +8,9 @@
 const players = [];
 
 class Player {
-  constructor (number, color) {
+  constructor(number, color) {
     if (players.length === 2) {
+      alert("2 players max!");
       throw new Error("2 players max!");
     }
     this.number = number
@@ -20,15 +21,18 @@ class Player {
 
 class Game {
   constructor(WIDTH, HEIGHT) {
+    if (players.length !== 2) {
+      alert("Need 2 players to play!");
+      throw new Error("Need 2 players to play!");
+    }
     this.WIDTH = WIDTH;
     this.HEIGHT = HEIGHT;
     this.board = [];
-    this.currPlayer = 1;
+    this.currPlayer = players[0];
     this.makeBoard();
     this.makeHtmlBoard();
   }
   board = [] // array of rows, each row is array of cells  (board[y][x])
-  currPlayer = 1 // active player: 1 or 2
 
   // makeBoard: create in-JS board structure:
   // board = array of rows, each row is array of cells  (board[y][x])
@@ -83,7 +87,7 @@ class Game {
   placeInTable(y, x) {
     const piece = document.createElement('div');
     piece.classList.add('piece');
-    piece.classList.add(`p${this.currPlayer}`);
+    piece.style.backgroundColor = `${this.currPlayer.color}`;
     piece.style.top = -50 * (y + 2);
 
     const spot = document.getElementById(`${y}-${x}`);
@@ -107,12 +111,14 @@ class Game {
     }
 
     // place piece in board and add to HTML table
-    this.board[y][x] = this.currPlayer;
+    this.board[y][x] = this.currPlayer.number;
     this.placeInTable(y, x);
 
     // check for win
     if (this.checkForWin()) {
-      return this.endGame(`Player ${this.currPlayer} won!`);
+      const top = document.getElementById('column-top');
+      top.removeEventListener('click', this.handleClick);
+      return this.endGame(`Player ${this.currPlayer.number} won!`);
     }
 
     // check for tie
@@ -121,8 +127,10 @@ class Game {
     }
 
     // switch players
-    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+    this.currPlayer = this.currPlayer === players[0] ? players[1] : players[0];
   }
+
+
   /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
   checkForWin() {
@@ -137,7 +145,7 @@ class Game {
           y < this.HEIGHT &&
           x >= 0 &&
           x < this.WIDTH &&
-          this.board[y][x] === this.currPlayer
+          this.board[y][x] === this.currPlayer.number
       );
     }
 
@@ -164,14 +172,14 @@ const board = document.getElementById("board");
 const startGameForm = document.getElementById('startGameForm');
 const playerForm = document.getElementById('playerForm')
 
-startGameForm.addEventListener("submit", function(e) {
+startGameForm.addEventListener("submit", function (e) {
   e.preventDefault();
   board.innerHTML = "";
-  new Game (startGameForm.elements[0].value, startGameForm.elements[1].value);
+  new Game(startGameForm.elements[0].value, startGameForm.elements[1].value);
 })
 
-playerForm.addEventListener("submit", function(e) {
+playerForm.addEventListener("submit", function (e) {
   e.preventDefault();
-  new Player (playerForm.elements[0].value, playerForm.elements[1].value)
+  new Player(playerForm.elements[0].value, playerForm.elements[1].value)
   playerForm.reset();
 })
