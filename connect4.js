@@ -175,7 +175,7 @@ const playerForm = document.getElementById('playerForm')
 startGameForm.addEventListener("submit", function (e) {
   e.preventDefault();
   board.innerHTML = "";
-  new Game(startGameForm.elements[0].value, startGameForm.elements[1].value);
+  new Game(6, 7);
 })
 
 playerForm.addEventListener("submit", function (e) {
