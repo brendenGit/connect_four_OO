@@ -1,15 +1,34 @@
 <!doctype html>
+
 <head>
   <title>Connect 4</title>
   <link href="connect4.css" rel="stylesheet">
 </head>
+
 <body>
 
-<div id="game">
-  <table id="board"></table>
-</div>
+  <div id="game">
+    <form id="playerForm">
+      <input type="text" id="playerNumber" placeholder="Enter player number" required>
+      <input type="text" id="playerColor" placeholder="Enter player color" required>
+      <br>
+      <br>
+      <input type="submit" value="Start Game">
+    </form>
+    <br>
+    <br>
+    <form id="startGameForm">
+      <input type="number" id="width" placeholder="Enter width" required>
+      <input type="number" id="height" placeholder="Enter height" required>
+      <br>
+      <br>
+      <input type="submit" value="Start Game">
+    </form>
+    <table id="board"></table>
+  </div>
 
-<script src="connect4.js"></script>
+  <script src="connect4.js"></script>
 
 </body>
+
 </html>
